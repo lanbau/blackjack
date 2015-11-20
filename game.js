@@ -71,9 +71,13 @@ function render () {
     console.log('BLACKJACK!')
     disableButton('.hitbutton')
     disableButton('.standbutton')
+    insertgif('win.gif', '.player', 'Player')
   }
   if (playerInitialScore === 22 && pvalue1 === 'A' && pvalue2 === 'A') {
     document.querySelector('.playerscore').innerHTML = 21
+    disableButton('.hitbutton')
+    disableButton('.standbutton')
+    insertgif('win.gif', '.player', 'Player')
   }
   // HIT BUTTON
   var hitbutton = document.querySelector('.hitbutton')
@@ -88,6 +92,7 @@ function render () {
       disableButton('.hitbutton')
       disableButton('.standbutton')
       console.log('PLAYER BUST. NOOB!')
+      insertgif('dog.gif', '.player', 'YOU LOSE')
     }
   })
   // STAND BUTTON
@@ -111,23 +116,45 @@ function disableButton (button) {
   document.querySelector(button).disabled = true
 }
 function checkWinner (cscore, pscore) {
+  console.log(cscore)
+  console.log(pscore)
   checkTie(cscore, pscore)
   didComWin(cscore, pscore)
-
+  didPlayerWin(cscore, pscore)
   function checkTie (cscore, pscore) {
     if (pscore === cscore) {
       console.log('TIE')
+      insertgif('boo.gif', '.player', 'NOBODY WON')
     }
   }
   function didComWin (cscore, pscore) {
     if (cscore < 21 || cscore === 21) {
       if (cscore > pscore) {
         console.log('COM WINS!')
+        insertgif('loser.gif', '.player', 'COMPUTER WINS')
       }
     } else {
       console.log('COM BUST! PLAYER WINS!')
+      insertgif('win.gif', '.player', 'PLAYER WINS')
     }
   }
+  function didPlayerWin (cscore, pscore) {
+    if (pscore > cscore) {
+      console.log('COM BUST! PLAYER WINS!')
+      insertgif('win.gif', '.player', 'PLAYER WINS!')
+    }
+  }
+}
+function insertgif (gif, classname, player) {
+  var clear = document.querySelector(classname)
+  clear.innerHTML = ''
+  var img = document.createElement('img')
+  img.src = gif
+  clear.appendChild(img)
+  var text = document.createElement('p')
+  text.innerHTML = player
+  clear.appendChild(text)
+  text.style.fontSize = '3em'
 }
 function getComScore () {
   return parseInt(document.querySelector('.comscore').innerHTML, 10)
